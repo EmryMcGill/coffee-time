@@ -11,7 +11,7 @@ export default function TabLayout() {
           justifyContent: 'center',
           alignItems: 'center',
           flex: 1,
-        }
+        },
       }}
     >
       <Tabs.Screen 

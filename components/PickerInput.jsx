@@ -1,15 +1,46 @@
-import { ChevronDown } from 'lucide-react-native'
+import { Picker } from '@react-native-picker/picker'
+import { ChevronDown, X } from 'lucide-react-native'
 import { useState } from 'react'
-import { Modal, Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
+import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
 import { theme } from '../constants/theme'
 import { hp, wp } from '../helpers/common'
+import Button from './Button'
 
-const PickerInput = ({icon, placeholder, value, options}) => {
+const PickerInput = ({icon, placeholder, value, setValue, options, title, type}) => {
 
     const [visible, setVisible] = useState(false);
+    const [isSearch, setIsSearch] = useState(false);
+    const [isTimer, setIsTimer] = useState(false);
+    const [intervalId, setIntervalId] = useState(null);
+    const [selectedValue, setSelectedValue] = useState(0);
+    const range = (start, end) => Array.from({length: end - start + 1}, (_, i) => start + i);
 
-    const onClose = () => {
-        setVisible(false);
+    const timer = () => {
+        if (isTimer) {
+            console.log('timer stopped');
+            setIsTimer(false);
+            clearInterval(intervalId);
+            return;
+        }
+    
+        setIsTimer(true);
+        console.log('timer started');
+    
+        const interval = setInterval(() => {
+            setValue(prev => {
+            const newValue = prev + 1;
+            console.log('timer: ', newValue); // Log the actual new value
+            
+            if (newValue >= 1000) {
+                clearInterval(interval);
+                setIsTimer(false);
+            }
+            
+            return newValue;
+            });
+        }, 1000);
+    
+        setIntervalId(interval);
     }
 
   return (
@@ -26,19 +57,75 @@ const PickerInput = ({icon, placeholder, value, options}) => {
             animationType="slide"
             transparent={true}
             visible={visible}
-            onRequestClose={onClose}
+            onRequestClose={() => setVisible(false)}
         >
-            <TouchableWithoutFeedback onPress={onClose}>
+            <TouchableWithoutFeedback onPress={() => setVisible(false)}>
             <View style={styles.overlay}>
                 <TouchableWithoutFeedback onPress={() => {}}>
-                <View style={styles.modalView}>
+                <View style={[styles.modalView, {maxHeight: isSearch ? hp(90) : hp(60)}]}>
                     {/* Handle bar */}
                     <View style={styles.handle} />
+
+                    {/* Header */}
+                    <View style={styles.modalHeader}>
+                        <Text style={styles.modalTitle}>{title}</Text>
+                        <X size={24} color={theme.colors.text} onPress={() => setVisible(false)} />
+                    </View>
+
                     
                     {/* Content */}
-                    <View style={styles.content}>
-                    <Text style={styles.defaultText}>BottomSheet Component</Text>
+                    {type === 'options' ?
+                    <ScrollView style={styles.content} keyboardShouldPersistTaps='always'>
+                        <TextInput
+                            style={[styles.option, {fontSize: hp(2.5), color: theme.colors.text}]}
+                            placeholder="Search..."
+                            onChangeText={text => {
+                                // Handle search logic
+                            }}
+                            onFocus={() => setIsSearch(true)}
+                            onBlur={() => setIsSearch(false)}
+                            placeholderTextColor={theme.colors.textLight}
+                        />
+                        {options?.map((option, index) => (
+                            <Pressable 
+                                key={index} 
+                                onPress={() => {
+                                    setVisible(false);
+                                    setValue(option);
+                                }}
+                                style={[styles.option, {borderBottomWidth: index === options.length - 1 ? 0 : 0.5, marginBottom: index === options.length - 1 ? 20 : 0}]}
+                            >
+                                <Text style={{fontSize: hp(2.5), color: theme.colors.text, fontWeight: theme.fonts.medium}}>
+                                    {option}
+                                </Text>
+                            </Pressable>
+                        ))}
+                    </ScrollView>
+                    :
+                    <View>
+                        <Picker
+                            selectedValue={value}
+                            onValueChange={(itemValue, itemIndex) => {
+                                setValue(itemValue);
+                                console.log(itemValue);
+                            }}
+                            itemStyle={{ fontSize: 20, color: 'black' }}
+                        >
+                        {range(1, 1000).map((number) => (
+                        <Picker.Item
+                            key={number}
+                            label={number.toString()}
+                            value={number}
+                        />
+                        ))}
+                    </Picker>
+                    <Button 
+                        title={isTimer ? 'Stop Timer' : 'Start Timer'} 
+                        buttonStyle={{marginBottom: 30, marginHorizontal: 20}} 
+                        onPress={timer}
+                    />
                     </View>
+                    }
                 </View>
                 </TouchableWithoutFeedback>
             </View>
@@ -63,48 +150,55 @@ const styles = StyleSheet.create({
         paddingHorizontal: 18,
         gap: 12
     },
-    welcomeText: {
-        color: theme.colors.text,
-        fontSize: hp(4),
-        fontWeight: theme.fonts.bold
-    },
     overlay: {
         flex: 1,
         justifyContent: 'flex-end',
-      },
-      modalView: {
+    },
+    modalHeader: {
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        borderBottomWidth: 0.5,
+        borderColor: theme.colors.textLight,
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'center'
+    },
+    modalTitle: {
+        fontSize: hp(2.5),
+        fontWeight: theme.fonts.bold,
+        color: theme.colors.text,
+    },  
+    modalView: {
         backgroundColor: 'white',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        paddingBottom: 20,
-        maxHeight: hp(80),
-        minHeight: hp(25),
         width: wp(100),
         shadowColor: '#000',
         shadowOffset: {
-          width: 0,
-          height: -2,
+            width: 0,
+            height: -2,
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-      },
-      handle: {
+    },
+    handle: {
         width: 40,
         height: 4,
         backgroundColor: '#ccc',
         borderRadius: 2,
         alignSelf: 'center',
         marginTop: 8,
-        marginBottom: 16,
-      },
-      content: {
-        paddingHorizontal: 20,
-        flex: 1,
-      },
-      defaultText: {
+    },
+    
+    defaultText: {
         fontSize: 16,
-        textAlign: 'center',
         marginTop: 20,
-      },
+    },
+    option: {
+        paddingVertical: 15,
+        borderBottomWidth: 0.5,
+        borderColor: theme.colors.text,
+        paddingHorizontal: 20,
+    },
 })
