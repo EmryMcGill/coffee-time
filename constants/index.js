@@ -1,0 +1,2 @@
+export const supabaseUrl = 'https://vnottakofalelepgubjk.supabase.co';
+export const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZub3R0YWtvZmFsZWxlcGd1YmprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3Mzc4ODcsImV4cCI6MjA2OTMxMzg4N30.kMHWNxx2cnrUVgmHvKo4mdfsMfFK6gQAW_5pOo5d_qg';
