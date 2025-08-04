@@ -1,4 +1,4 @@
-// import { Picker } from '@react-native-picker/picker'
+import { Picker } from '@react-native-picker/picker'
 import { ChevronDown, X } from 'lucide-react-native'
 import { useState } from 'react'
 import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
@@ -11,7 +11,6 @@ const PickerInput = ({icon, placeholder, value, setValue, options, title, type})
     const [isSearch, setIsSearch] = useState(false);
     const [isTimer, setIsTimer] = useState(false);
     const [intervalId, setIntervalId] = useState(null);
-    const [selectedValue, setSelectedValue] = useState(0);
     const range = (start, end) => Array.from({length: end - start + 1}, (_, i) => start + i);
 
     const timer = () => {
@@ -102,8 +101,8 @@ const PickerInput = ({icon, placeholder, value, setValue, options, title, type})
                     </ScrollView>
                     :
                     <View>
-                        {/* <Picker
-                            selectedValue={value}
+                        <Picker
+                            selectedValue={value || 1}
                             onValueChange={(itemValue, itemIndex) => {
                                 setValue(itemValue);
                                 console.log(itemValue);
@@ -122,7 +121,7 @@ const PickerInput = ({icon, placeholder, value, setValue, options, title, type})
                             title={isTimer ? 'Stop Timer' : 'Start Timer'} 
                             buttonStyle={{marginBottom: 30, marginHorizontal: 20}} 
                             onPress={timer}
-                        /> */}
+                        />
                     </View>
                     }
                 </View>
