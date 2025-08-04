@@ -1,10 +1,9 @@
-import { Picker } from '@react-native-picker/picker'
+// import { Picker } from '@react-native-picker/picker'
 import { ChevronDown, X } from 'lucide-react-native'
 import { useState } from 'react'
 import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
 import { theme } from '../constants/theme'
 import { hp, wp } from '../helpers/common'
-import Button from './Button'
 
 const PickerInput = ({icon, placeholder, value, setValue, options, title, type}) => {
 
@@ -103,7 +102,7 @@ const PickerInput = ({icon, placeholder, value, setValue, options, title, type})
                     </ScrollView>
                     :
                     <View>
-                        <Picker
+                        {/* <Picker
                             selectedValue={value}
                             onValueChange={(itemValue, itemIndex) => {
                                 setValue(itemValue);
@@ -111,19 +110,19 @@ const PickerInput = ({icon, placeholder, value, setValue, options, title, type})
                             }}
                             itemStyle={{ fontSize: 20, color: 'black' }}
                         >
-                        {range(1, 1000).map((number) => (
-                        <Picker.Item
-                            key={number}
-                            label={number.toString()}
-                            value={number}
-                        />
-                        ))}
-                    </Picker>
-                    <Button 
-                        title={isTimer ? 'Stop Timer' : 'Start Timer'} 
-                        buttonStyle={{marginBottom: 30, marginHorizontal: 20}} 
-                        onPress={timer}
-                    />
+                            {range(1, 1000).map((number) => (
+                            <Picker.Item
+                                key={number}
+                                label={number.toString()}
+                                value={number}
+                            />
+                            ))}
+                        </Picker>
+                        <Button 
+                            title={isTimer ? 'Stop Timer' : 'Start Timer'} 
+                            buttonStyle={{marginBottom: 30, marginHorizontal: 20}} 
+                            onPress={timer}
+                        /> */}
                     </View>
                     }
                 </View>
