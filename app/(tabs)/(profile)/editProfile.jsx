@@ -158,7 +158,7 @@ const EditProfile = () => {
           <View style={styles.header}>
             <Text style={styles.title}>Edit Profile</Text>
             <IconButton 
-              icon={<ChevronLeft size={30} />}
+              icon={<ChevronLeft size={28} />}
               onPress={() => router.back()} 
               style={{position: 'absolute', left: wp(4), alignSelf: 'center'}}
             />         

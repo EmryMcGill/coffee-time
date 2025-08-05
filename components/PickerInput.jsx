@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
 import { theme } from '../constants/theme'
 import { hp, wp } from '../helpers/common'
+import Button from './Button'
 
 const PickerInput = ({icon, placeholder, value, setValue, options, title, type}) => {
 
@@ -46,7 +47,7 @@ const PickerInput = ({icon, placeholder, value, setValue, options, title, type})
         style={[styles.container]} 
         onPress={() => setVisible(true)}>
         {icon}
-        <Text style={{color: theme.colors.text, fontSize: hp(2.2), flex: 1}}>
+        <Text style={[{fontSize: hp(2.2), flex: 1}, value ? {color: theme.colors.text} : {color: theme.colors.textLight} ]}>
             {value || placeholder}
         </Text>
         <ChevronDown size={24} color={theme.colors.text} />
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
         borderRadius: theme.radius.xxl,
         borderCurve: 'continuous',
         paddingHorizontal: 18,
-        gap: 12
+        gap: 12,
     },
     overlay: {
         flex: 1,

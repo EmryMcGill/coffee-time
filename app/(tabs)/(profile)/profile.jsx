@@ -31,7 +31,7 @@ const Profile = () => {
               <View style={styles.header}>
                       <Text style={styles.title}>Profile</Text>
                       <IconButton 
-                        icon={<Settings size={30} />}
+                        icon={<Settings size={28} />}
                         onPress={onLogout} 
                         style={{position: 'absolute', right: 0, alignSelf: 'center'}}
                       />
