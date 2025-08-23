@@ -1,7 +1,11 @@
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import { Home, Plus, User } from 'lucide-react-native';
+import { Pressable } from 'react-native';
+import { theme } from '../../constants/theme';
 
 export default function TabLayout() {
+
+  const router = useRouter();
 
   return (
     <Tabs 
@@ -24,14 +28,22 @@ export default function TabLayout() {
           tabBarShowLabel: false
         }}
       />
-      <Tabs.Screen 
-        name="createBrew" 
+      <Tabs.Screen
+        name="dummy"
         options={{
           title: 'Create Brew',
-          tabBarIcon: ({ color, size }) => (
-            <Plus color={color} size={size} />
+          tabBarShowLabel: false,
+          tabBarButton: (props) => (
+            <Pressable
+              {...props}
+              onPress={() => {
+                router.push('/createBrew');
+              }}
+              style={{alignItems: 'center', justifyContent: 'center', height: '100%'}}
+            >
+              <Plus size={24} color={theme.colors.primary} />
+            </Pressable>
           ),
-          tabBarShowLabel: false
         }}
       />
       <Tabs.Screen 

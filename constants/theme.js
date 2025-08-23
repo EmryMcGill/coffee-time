@@ -1,24 +1,24 @@
 export const theme = {
   colors: {
-    primary: '#CA7842',
-    primaryDark: '#91562fff',
-    dark: '#3E3E3E',
-    darkLight: '#E1E1E1',
-    gray: '#e3e3e3',
+    primary: "#CA7842",
+    primaryDark: "#91562fff",
+    dark: "#3E3E3E",
+    darkLight: "#E1E1E1",
+    gray: "#e3e3e3",
 
-    text: '#494949',
-    textLight: '#7C7C7C',
-    textDark: '#1D1D1D',
+    text: "#000000ff",
+    textLight: "#484848ff",
+    textDark: "#1D1D1D",
 
-    rose: '#ef4444',
-    roseLight: '#f87171',
+    rose: "#ef4444",
+    roseLight: "#f87171",
   },
 
   fonts: {
-    medium: '500',
-    semibold: '600',
-    bold: '700',
-    extraBold: '800',
+    medium: "500",
+    semibold: "600",
+    bold: "700",
+    extraBold: "800",
   },
 
   radius: {
@@ -29,4 +29,4 @@ export const theme = {
     xl: 18,
     xxl: 22,
   },
-}
+};

@@ -8,6 +8,7 @@ export const getAvatar = imagePath => {
         return getFileUrl(imagePath);
     }
     else if (typeof imagePath === 'object') {
+        // console.log('local')
         return {uri: imagePath?.uri}
     }
     else {
@@ -16,15 +17,16 @@ export const getAvatar = imagePath => {
 }
 
 export const getFileUrl = filePath => {
-    if (filePath)
+    if (filePath) {
+        // console.log('remote')
         return {uri: `${supabaseUrl}/storage/v1/object/public/uploads/${filePath}`}
+    }
     else 
         return null;
 }
 
 export const uploadFile = async (folderName, fileUri, isImage=true) => {
     try {
-        console.log('fileuri', fileUri)
         const filename = getFilePath(folderName, isImage);
         const fileBase64 = await FileSystem.readAsStringAsync(fileUri, {
             encoding: FileSystem.EncodingType.Base64
@@ -43,8 +45,6 @@ export const uploadFile = async (folderName, fileUri, isImage=true) => {
             console.log(err);
             return {success: false, msg: 'file upload failed'};
         }
-
-        console.log('data', data);
 
         return {success: true, data: data.path};
     }

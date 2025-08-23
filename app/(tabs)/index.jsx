@@ -1,54 +1,84 @@
-import { supabase } from '@/lib/supabase';
-import { StyleSheet, Text, View } from 'react-native';
-import Avatar from '../../components/Avatar';
-import ScreenWrapper from '../../components/ScreenWrapper';
-import { theme } from '../../constants/theme';
-import { useAuth } from '../../contexts/AuthContext';
-import { hp, wp } from '../../helpers/common';
-import { getAvatar } from '../../services/imageService';
+import { useSearchParams } from "expo-router/build/hooks";
+import { useEffect, useState } from "react";
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import BrewCard from "../../components/BrewCard";
+import ScreenWrapper from "../../components/ScreenWrapper";
+import { theme } from "../../constants/theme";
+import { useAuth } from "../../contexts/AuthContext";
+import { hp, wp } from "../../helpers/common";
+import { getAllBrews } from "../../services/brewService";
 
 const Index = () => {
+  const { user, setAuth } = useAuth();
+  const [brews, setBrews] = useState([]);
+  const params = useSearchParams();
 
-    const {user, setAuth} = useAuth();
-
-    const onLogout = async () => {
-        setAuth(null);
-        const {error} = await supabase.auth.signOut();
+  useEffect(() => {
+    if (params.refresh === "true") {
+      console.log("new brew");
+      getBrews();
     }
+  }, [params.refresh]);
 
+  useEffect(() => {
+    getBrews();
+  }, [user]);
 
-    return (
-        <ScreenWrapper bg='white'>
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <Text style={styles.title}>Hot Mud</Text>
-                    <Avatar 
-                        size={hp(4.3)}
-                        rounded={theme.radius.sm}
-                        uri={getAvatar(user?.image)}
-                    />
-                </View>
-            </View>
-        </ScreenWrapper>
-    )
-}
+  useEffect(() => {
+    // console.log(brews)
+  }, [brews]);
 
-export default Index
+  const getBrews = async () => {
+    const res = await getAllBrews(user.id);
+    if (res.success) {
+      setBrews(res.data);
+    }
+  };
+
+  return (
+    <ScreenWrapper bg="white">
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f9fa" }}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.title}>Hot Mud</Text>
+        </View>
+        <FlatList
+          style={styles.brewContainer}
+          data={brews}
+          renderItem={({ item }) => <BrewCard brew={item} />}
+          keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator={false}
+        />
+      </SafeAreaView>
+    </ScreenWrapper>
+  );
+};
+
+export default Index;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    },
-    header: {
-        marginHorizontal: wp(4),
-        marginBottom: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    title: {
-        fontSize: hp(3.3),
-        fontWeight: theme.fonts.bold,
-        color: theme.colors.text
-    }
-})
+  header: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: hp(1),
+    paddingBottom: hp(2),
+    backgroundColor: "white",
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.gray,
+  },
+  title: {
+    fontSize: hp(3.3),
+    fontWeight: theme.fonts.bold,
+    color: theme.colors.text,
+  },
+  brewContainer: {
+    paddingHorizontal: wp(4),
+    paddingTop: hp(8),
+  },
+});
